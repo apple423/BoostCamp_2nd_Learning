@@ -155,6 +155,296 @@
 
 ## 4. 안드로이드스튜디오 템플릿을 활용한 프로젝트 생성하기
 * 네비게이션 드로어 프로젝트 생성 및 코드 분석
+  - ### 이미지
+    - #### 초기화면
+    ![navigationProject](navigationProject.png)
+
+    - #### 네비게이션 드로워를 펼쳤을때
+    ![navigationProjectOpen](navigationProjectOpen)
+
+  - ## Java
+    - #### MainActivity
+    ```{.java}
+    package com.example.han.chapter2_1;
+
+    import android.os.Bundle;
+    import android.support.design.widget.FloatingActionButton;
+    import android.support.design.widget.Snackbar;
+    import android.view.View;
+    import android.support.design.widget.NavigationView;
+    import android.support.v4.view.GravityCompat;
+    import android.support.v4.widget.DrawerLayout;
+    import android.support.v7.app.ActionBarDrawerToggle;
+    import android.support.v7.app.AppCompatActivity;
+    import android.support.v7.widget.Toolbar;
+    import android.view.Menu;
+    import android.view.MenuItem;
+
+    public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+      }
+    }
+    ```
+
+    - #### 특이사항 :
+    1. Toolbar를 생성해준다. 자바코드에서는 기존의 Actionbar와 같은 절차로 inflate 된다
+    2. ActionBarDrawerToggle : Toolbar 와 DrawerLayout을 묶어주는 역할
+       API문서에는 onConfigurationChanged 혹은 onOptionsItemSelected 꼭 구현하라고 한다
+       onPostCreate에서 syncState를 호출하여 onRestoreInstanceState 발생 이후 동기화를 시켜주도록 한다.
+
+    3. setDrawerListener : deprecated 되었기 때문에 addDrawerListener를 써야한다
+<br>
+  - ## xml
+  - ### layout
+    - #### activity_main.xml
+    ```{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start">
+
+        <include
+            layout="@layout/app_bar_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header_main"
+            app:menu="@menu/activity_main_drawer" />
+
+    </android.support.v4.widget.DrawerLayout>
+    ```
+    - #### 특이사항
+    1. DrawerLayout의 tools:openDrawer="start" : preview 화면에서 drawer가 열려있나 닫혀있나
+    2. android:fitsSystemWindows : 뷰가 차지할 수 있는 영역을 상태바 및 소프트키 영역을
+    제외한 영역까지 확장
+    3. NavigationView 내부에 app:headerLayout, app:menu를 통해 navigation_drawer의
+    레이아웃 설정
+<br>
+    - #### app_bar_main.xml
+    ```{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.han.chapter2_1.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    </android.support.design.widget.CoordinatorLayout>
+    ```
+    - #### 특이사항
+    1. AppBarLayout :머터리얼 디자인의 컨셉 중 scrolling gestures를 구현하는
+    vertical LinearLayout, 스크롤에 관한 커스터마이징을 위해 쓴다.
+
+    2. android:srcCompat : 플로팅 액션 버튼의 이미지를 설정
+<br>
+    - #### content_main
+    ```{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.example.han.chapter2_1.MainActivity"
+        tools:showIn="@layout/app_bar_main">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!" />
+    </RelativeLayout>
+    ```
+    - #### 특이사항
+    1. app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    이것이 선언 되어있는 곳의 스크롤의 정보에 따라 AppBarLayout이 반응하여 이벤트를
+    발생 시킬 수 있도록 한다
+
+  - ### menu
+    - #### activity_main_drawer
+    ```{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Gallery" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Slideshow" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+    </menu>
+    ```
+
+    - #### 특이사항
+    1. android:checkableBehavior :  전체 그룹에 대한 선택 가능한 동작
+    single, all (checkbox), none 3개의 타입이 있다.
+
+    - ### menu.xml
+    ```{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    </menu>
+    ```
+    - #### 특이사항
+    1. app:showAsAction : 항목이 앱 바에서 작업 항목으로 나타나는 시기와 방법을 지정
+
+
 * 하단 네비게이션 프로젝트 생성 및 코드 분석
 * 구글 맵 프로젝트 생성 및 코드 분석
 
