@@ -4,7 +4,7 @@
 ## 1. 알림 기능 살펴보기
 * 토스트 : 적은 양의 메시지를 빠르게 보여주는데 좋은 뷰
 
-  - 이미지 : ![toastImage](toastImage.png)
+  - 이미지 : ![toastImage](2nd_images/toastImage.png)
 
   - 상속계층도
 
@@ -21,7 +21,7 @@
 
 * 스낵바 : 동작에 따른 짧은 메세지를 보여주기 위한 기능
 
-  - 이미지 : ![snackBar](snackBar.png)
+  - 이미지 : ![snackBar](2nd_images/snackBar.png)
 
   - 상속계층도
 
@@ -40,7 +40,7 @@
 
 * 대화상자 : 대화상자는 사용자에게 결정을 내리거나 추가 정보를 입력하라는 작은 창
 
-  - 이미지 : ![dialogs](dialogs.png)
+  - 이미지 : ![dialogs](2nd_images/dialogs.png)
 
   - 상속계층도
 
@@ -89,7 +89,7 @@
 
 * 통지(Notification) : 애플리케이션의 정상 UI 외부에서 사용자에게 표시할 수 있는 메시지
 
-  - 이미지 : ![notification](notification.png)
+  - 이미지 : ![notification](2nd_images/notification.png)
 
   - 상속계층도
 
@@ -154,13 +154,13 @@
 * 머티리얼 디자인의 이해
 
 ## 4. 안드로이드스튜디오 템플릿을 활용한 프로젝트 생성하기
-* 네비게이션 드로어 프로젝트 생성 및 코드 분석
+* ## 네비게이션 드로어 프로젝트 생성 및 코드 분석
   - ### 이미지
     - #### 초기화면
-    ![navigationProject](navigationProject.png)
+    ![navigationProject](2nd_images/navigationProject.png)
 
     - #### 네비게이션 드로워를 펼쳤을때
-    ![navigationProjectOpen](navigationProjectOpen)
+    ![navigationProjectOpen](2nd_images/navigationProjectOpen)
 
   - ### Java
     - #### MainActivity
@@ -443,8 +443,220 @@
     1. app:showAsAction : 항목이 앱 바에서 작업 항목으로 나타나는 시기와 방법을 지정
 
 
-* 하단 네비게이션 프로젝트 생성 및 코드 분석
-* 구글 맵 프로젝트 생성 및 코드 분석
+* ## 하단 네비게이션 프로젝트 생성 및 코드 분석
+  - ### 이미지
+    - #### 초기화면
+    ![bottomNavigationProject](2nd_images/bottomNavigationProject.png)
+
+  - ## Java
+  
+    - ### MainActivity
+    ```java
+    package com.example.han.chapter2_2;
+
+    import android.os.Bundle;
+    import android.support.annotation.NonNull;
+    import android.support.design.widget.BottomNavigationView;
+    import android.support.v7.app.AppCompatActivity;
+    import android.view.MenuItem;
+    import android.widget.TextView;
+
+    public class MainActivity extends AppCompatActivity {
+
+    private TextView mTextMessage;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mTextMessage.setText(R.string.title_home);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mTextMessage.setText(R.string.title_dashboard);
+                    return true;
+                case R.id.navigation_notifications:
+                    mTextMessage.setText(R.string.title_notifications);
+                    return true;
+            }
+            return false;
+        }
+
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mTextMessage = (TextView) findViewById(R.id.message);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+      }
+
+    }
+    ```
+    - #### 특이사항
+     1. BottomNavigationView.OnNavigationItemSelectedListener 사용
+    
+  - ## xml
+  - ### layout
+    - #### activity_main.xml
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.han.chapter2_2.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/title_home" />
+
+    </FrameLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/navigation" />
+
+    </LinearLayout>
+    ```
+    - #### 특이사항
+     1. app:menu로 레이아웃 지정
+     
+  - ### menu
+    - #### navigation.xml
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_dashboard" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_notifications" />
+
+    </menu>
+    ```
+
+* ## 구글 맵 프로젝트 생성 및 코드 분석
+
+  - ### 이미지
+    - #### 초기화면
+    ![maps](2nd_images/maps.jpg)
+  - ## Java
+    - #### MapsActivity.java
+    ```java
+    package com.example.han.chapter2_3;
+
+    import android.support.v4.app.FragmentActivity;
+    import android.os.Bundle;
+    import com.google.android.gms.maps.CameraUpdateFactory;
+    import com.google.android.gms.maps.GoogleMap;
+    import com.google.android.gms.maps.OnMapReadyCallback;
+    import com.google.android.gms.maps.SupportMapFragment;
+    import com.google.android.gms.maps.model.LatLng;
+    import com.google.android.gms.maps.model.MarkerOptions;
+
+    public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private GoogleMap mMap;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+      }
+    }
+
+    ```
+    - #### 특이사항
+     1. **OnMapReadyCallback** :  맵이 사용하기 위해 준비를 갖췄을때를 위한 Callback Interface, onMapReady를 구현 해야한다. MapView와 MapFragment 사용시 필수적으로 쓰인다.
+     2.  **MapFragment** :  맵을 보여주기 위한 fragment
+     3.  **getMapAsync(OnMapReadyCallback onMapReadyCallback)** : 맵 시스템과 뷰를 초기화 한다.
+     4.  **addMarker(MarkerOptions options)** :  지도에 마커를 남긴다
+     5.  **moveCamera(CameraUpdate update)** : update에 정의된 지시에 따라 위치를 카메라를 옮긴다.
+   
+   - ## xml
+   - ## layout
+	  - #### activity_maps.xml
+	   ```xml
+	  <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:map="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/map"
+     android:name="com.google.android.gms.maps.SupportMapFragment"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context="com.example.han.chapter2_3.MapsActivity" />
+     
+     ```
+     - #### 특이사항
+      1. android:name : 인스턴스화 할 Fragment 클래스를 지정
+
+    - #### AndroidManifest.xml
+       ```xml
+       <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+      ```
+       - 매니패스트에 메타데이터로 API키를 추가해야 한다.
+
 
 ## 5. 안드로이드 저장소 살펴보기
 * 프리퍼런스(Preference) 활용
