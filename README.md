@@ -11,7 +11,7 @@
 		    java.lang.Object
 		      ↳android.widget.Toast
 
-  - 주요 특징
+  - 주요 특징 
 	 - static Toast makeText(Context context, CharSequence text, int duration)
 	  : 텍스트 뷰를 포함한 토스트를 만든다.
 
@@ -81,10 +81,10 @@
   }
   ```
 
-  - 대화상자 종류 :
-  Basic Dialog : 가장 기초적인 방법의 DialogFragment 사용한 대화상자
-  AlterDialog : 경고를 보여주기 위한 대화상자
-  DatePickerDialog 또는 TimePickerDialog : 미리 정의된 UI를 통해 시간이나 날짜를 선택 할 수 있도록 하는 대화상자
+  - 대화상자 종류 :  
+  Basic Dialog : 가장 기초적인 방법의 DialogFragment 사용한 대화상자  
+  AlterDialog : 경고를 보여주기 위한 대화상자  
+  DatePickerDialog 또는 TimePickerDialog : 미리 정의된 UI를 통해 시간이나 날짜를 선택 할 수 있도록 하는 대화상자  
 
 
 * 통지(Notification) : 애플리케이션의 정상 UI 외부에서 사용자에게 표시할 수 있는 메시지
@@ -98,19 +98,19 @@
 
   - 필수 통지 콘텐츠
   Notification 객체는 다음을 반드시 포함해야 합니다.
-    - setSmallIcon()이 설정한 작은 아이콘
-    - setContentTitle()이 설정한 제목
-    - setContentText()이 설정한 세부 텍스트
+    - setSmallIcon()이 설정한 작은 아이콘  
+    - setContentTitle()이 설정한 제목  
+    - setContentText()이 설정한 세부 텍스트  
 
-  - 통지 생성
-   NotificationCompat.Builder 개체에서 알림에 대한 UI 정보와 작업을 지정합니다.
-   알림 자체를 생성하려면 NotificationCompat.Builder.build()를 호출합니다.
-   이는 사양이 포함된 Notification 객체를 반환합니다.
-   알림을 발행하려면 NotificationManager.notify()를 호출해서 시스템에 Notification 객체를 전달합니다
+  - 통지 생성  
+   NotificationCompat.Builder 개체에서 알림에 대한 UI 정보와 작업을 지정합니다.  
+   알림 자체를 생성하려면 NotificationCompat.Builder.build()를 호출합니다.  
+   이는 사양이 포함된 Notification 객체를 반환합니다.  
+   알림을 발행하려면 NotificationManager.notify()를 호출해서 시스템에 Notification 객체를 전달합니다  
 
   - 예제
-  ```{.java}
-        NotificationCompat.Builder mBuilder =
+  ```{.java }
+    NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle("My notification")
@@ -162,11 +162,10 @@
     - #### 네비게이션 드로워를 펼쳤을때
     ![navigationProjectOpen](navigationProjectOpen)
 
-  - ## Java
+  - ### Java
     - #### MainActivity
-    ```{.java}
+    ```java		   
     package com.example.han.chapter2_1;
-
     import android.os.Bundle;
     import android.support.design.widget.FloatingActionButton;
     import android.support.design.widget.Snackbar;
@@ -179,107 +178,106 @@
     import android.support.v7.widget.Toolbar;
     import android.view.Menu;
     import android.view.MenuItem;
-
+    
     public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+			implements NavigationView.OnNavigationItemSelectedListener {
+			
+			@Override
+			protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_main);
+			Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+			setSupportActionBar(toolbar);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+			FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+			fab.setOnClickListener(new View.OnClickListener() {
+			    @Override
+			    public void onClick(View view) {
+				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+					.setAction("Action", null).show();
+			    }
+			});
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+			DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+			ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+				this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+			drawer.setDrawerListener(toggle);
+			toggle.syncState();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+			NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+			navigationView.setNavigationItemSelectedListener(this);
+		    }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
+		    @Override
+		    public void onBackPressed() {
+			DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+			if (drawer.isDrawerOpen(GravityCompat.START)) {
+			    drawer.closeDrawer(GravityCompat.START);
+			} else {
+			    super.onBackPressed();
+			}
+		    }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+		    @Override
+		    public boolean onCreateOptionsMenu(Menu menu) {
+			// Inflate the menu; this adds items to the action bar if it is present.
+			getMenuInflater().inflate(R.menu.main, menu);
+			return true;
+		    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+		    @Override
+		    public boolean onOptionsItemSelected(MenuItem item) {
+			// Handle action bar item clicks here. The action bar will
+			// automatically handle clicks on the Home/Up button, so long
+			// as you specify a parent activity in AndroidManifest.xml.
+			int id = item.getItemId();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+			//noinspection SimplifiableIfStatement
+			if (id == R.id.action_settings) {
+			    return true;
+			}
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+			return super.onOptionsItemSelected(item);
+		    }
 
-        return super.onOptionsItemSelected(item);
-    }
+		    @SuppressWarnings("StatementWithEmptyBody")
+		    @Override
+		    public boolean onNavigationItemSelected(MenuItem item) {
+			// Handle navigation view item clicks here.
+			int id = item.getItemId();
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+			if (id == R.id.nav_camera) {
+			    // Handle the camera action
+			} else if (id == R.id.nav_gallery) {
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+			} else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_slideshow) {
+			} else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_manage) {
+			} else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_share) {
+			} else if (id == R.id.nav_send) {
 
-        } else if (id == R.id.nav_send) {
+			}
 
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-      }
-    }
+			DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+			drawer.closeDrawer(GravityCompat.START);
+			return true;
+		      }
+		    }
     ```
 
     - #### 특이사항 :
-    1. Toolbar를 생성해준다. 자바코드에서는 기존의 Actionbar와 같은 절차로 inflate 된다
-    2. ActionBarDrawerToggle : Toolbar 와 DrawerLayout을 묶어주는 역할
+     1. Toolbar를 생성해준다. 자바코드에서는 기존의 Actionbar와 같은 절차로 inflate 된다
+     2. ActionBarDrawerToggle : Toolbar 와 DrawerLayout을 묶어주는 역할
        API문서에는 onConfigurationChanged 혹은 onOptionsItemSelected 꼭 구현하라고 한다
        onPostCreate에서 syncState를 호출하여 onRestoreInstanceState 발생 이후 동기화를 시켜주도록 한다.
 
-    3. setDrawerListener : deprecated 되었기 때문에 addDrawerListener를 써야한다
-<br>
+     3. setDrawerListener : deprecated 되었기 때문에 addDrawerListener를 써야한다
   - ## xml
   - ### layout
     - #### activity_main.xml
-    ```{.xml}
+    ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -312,9 +310,9 @@
     제외한 영역까지 확장
     3. NavigationView 내부에 app:headerLayout, app:menu를 통해 navigation_drawer의
     레이아웃 설정
-<br>
+    
     - #### app_bar_main.xml
-    ```{.xml}
+    ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -355,7 +353,7 @@
     vertical LinearLayout, 스크롤에 관한 커스터마이징을 위해 쓴다.
 
     2. android:srcCompat : 플로팅 액션 버튼의 이미지를 설정
-<br>
+    
     - #### content_main
     ```{.xml}
     <?xml version="1.0" encoding="utf-8"?>
@@ -386,7 +384,7 @@
 
   - ### menu
     - #### activity_main_drawer
-    ```{.xml}
+    ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -430,7 +428,7 @@
     single, all (checkbox), none 3개의 타입이 있다.
 
     - ### menu.xml
-    ```{.xml}
+    ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
