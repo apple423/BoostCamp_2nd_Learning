@@ -160,7 +160,7 @@
     ![navigationProject](2nd_images/navigationProject.png)
 
     - #### 네비게이션 드로워를 펼쳤을때
-    ![navigationProjectOpen](2nd_images/navigationProjectOpen)
+    ![navigationProjectOpen](2nd_images/navigationProjectOpen.png)
 
   - ### Java
     - #### MainActivity
